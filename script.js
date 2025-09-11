@@ -150,8 +150,8 @@ class EliteStore {
                 return;
             }
             
-            // Initialize Stripe with your publishable key (LIVE MODE)
-            this.stripe = Stripe('pk_live_51RhRw1KC1EgAKi0LwBZCBElUcxRfaECrpVxpQQX4F9lKoACATGhmYjlr2YMkXcEWPymXjQ8wtvVp2qfarQ6ZX8y600a6JhuhGe');
+            // Initialize Stripe with your publishable key (TEST MODE)
+            this.stripe = Stripe('pk_test_51RhRw1KC1EgAKi0LV547I6dGQm7fmP8tIYnMUPiVCe7Kz8ZV1Bll4AXnL9QzP3mQ8OHRSTsVkyNc5mjeEfiY9F0s00XuHO5kQ8');
             
             // Create elements instance
             this.elements = this.stripe.elements();
@@ -1268,8 +1268,12 @@ class EliteStore {
         const fullName = `${firstName} ${lastName}`.trim();
         const email = document.getElementById('email')?.value.trim() || '';
         const phone = document.getElementById('phone')?.value.trim() || '';
-        const street = document.getElementById('address-line1')?.value.trim() || '';
+        
+        // Complete address information
+        const addressLine1 = document.getElementById('address-line1')?.value.trim() || '';
+        const addressLine2 = document.getElementById('address-line2')?.value.trim() || '';
         const city = document.getElementById('city')?.value.trim() || '';
+        const state = document.getElementById('state')?.value.trim() || '';
         const postalCode = document.getElementById('postal-code')?.value.trim() || '';
         const country = document.getElementById('country')?.value || '';
 
@@ -1277,16 +1281,28 @@ class EliteStore {
         console.log('- Name:', fullName);
         console.log('- Email:', email);
         console.log('- Phone:', phone);
-        console.log('- Address:', street, city, postalCode, country);
+        console.log('- Address Line 1:', addressLine1);
+        console.log('- Address Line 2:', addressLine2);
+        console.log('- City:', city);
+        console.log('- State:', state);
+        console.log('- Postal Code:', postalCode);
+        console.log('- Country:', country);
+
+        // Validate required fields
+        if (!fullName || !email || !phone || !addressLine1 || !city || !postalCode || !country) {
+            throw new Error('Por favor, preencha todos os campos obrigatórios de entrega.');
+        }
 
         return {
             name: fullName,
             email: email,
             phone: phone,
             address: {
-                street: street,
+                line1: addressLine1,
+                line2: addressLine2,
                 city: city,
-                postalCode: postalCode,
+                state: state,
+                postal_code: postalCode,
                 country: country
             }
         };
@@ -1471,8 +1487,8 @@ async function processStripePayment() {
         // Create payment intent
         const paymentData = await createPaymentIntent(window.store.cart, customerInfo);
 
-        // Initialize Stripe elements (LIVE MODE)
-        const stripe = Stripe('pk_live_51RhRw1KC1EgAKi0LwBZCBElUcxRfaECrpVxpQQX4F9lKoACATGhmYjlr2YMkXcEWPymXjQ8wtvVp2qfarQ6ZX8y600a6JhuhGe');
+        // Initialize Stripe elements (TEST MODE)
+        const stripe = Stripe('pk_test_51RhRw1KC1EgAKi0LV547I6dGQm7fmP8tIYnMUPiVCe7Kz8ZV1Bll4AXnL9QzP3mQ8OHRSTsVkyNc5mjeEfiY9F0s00XuHO5kQ8');
         const elements = stripe.elements({
             clientSecret: paymentData.clientSecret
         });
