@@ -11,7 +11,7 @@ class EliteStore {
         this.elements = null;
         this.cardElement = null;
         this.isProcessingPayment = false;
-        this.API_BASE_URL = 'http://localhost:3001/api';
+        this.API_BASE_URL = 'https://elite-store-backend.onrender.com/api';
         this.init();
     }
 
@@ -1424,7 +1424,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Payment processing functions
 async function createPaymentIntent(cartItems, customerInfo) {
     try {
-        const response = await fetch('http://localhost:3001/api/create-payment-intent', {
+        const response = await fetch('https://elite-store-backend.onrender.com/api/create-payment-intent', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
