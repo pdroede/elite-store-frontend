@@ -150,8 +150,8 @@ class EliteStore {
                 return;
             }
             
-            // Initialize Stripe with your publishable key (TEST MODE)
-            this.stripe = Stripe('pk_test_51RhRw1KC1EgAKi0LV547I6dGQm7fmP8tIYnMUPiVCe7Kz8ZV1Bll4AXnL9QzP3mQ8OHRSTsVkyNc5mjeEfiY9F0s00XuHO5kQ8');
+            // Initialize Stripe with your publishable key (LIVE MODE)
+            this.stripe = Stripe('pk_live_51RhRw1KC1EgAKi0LwBZCBElUcxRfaECrpVxpQQX4F9lKoACATGhmYjlr2YMkXcEWPymXjQ8wtvVp2qfarQ6ZX8y600a6JhuhGe');
             
             // Create elements instance
             this.elements = this.stripe.elements();
