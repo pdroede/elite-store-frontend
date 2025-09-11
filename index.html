@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Store - Premium Skincare Collection</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Stripe.js -->
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'gold': '#FFD700',
+                        'yellow': '#FFEB3B',      
+                        'yellow-dark': '#FFC107',  
+                        'sage-green': '#7A9A76',
+                        'sage-dark': '#5F7A5B',
+                        'sage-light': '#A8C5A4',
+                        'dark-gray': '#1a1a1a',
+                        'light-gray': '#f8f9fa',
+                        'cream': '#f8f6f0',
+                        'charcoal': '#2c2c2c',
+                        'forest': '#2d4a2b',
+                        'sage': '#87a587',
+                        'emerald': '#059669'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-inter text-dark-gray bg-white">
+    <!-- Fixed Header -->
+    <header class="fixed top-0 w-full bg-white/95 backdrop-blur-md z-50 border-b border-gray-200">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="w-8 h-8 bg-sage-green rounded-lg flex items-center justify-center mr-3">
+                        <span class="text-white font-bold text-sm">ES</span>
+                    </div>
+                    <div class="text-2xl font-bold">
+                        Elite<span class="text-sage-green">Store</span>
+                    </div>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="text-dark-gray hover:text-sage-green transition-colors">Home</a>
+                    <a href="#products" class="text-dark-gray hover:text-sage-green transition-colors">Products</a>
+                    <a href="#about" class="text-dark-gray hover:text-sage-green transition-colors">About</a>
+                    <a href="#contact" class="text-dark-gray hover:text-sage-green transition-colors">Contact</a>
+                </div>
+                
+                <!-- Cart and Mobile Menu -->
+                <div class="flex items-center space-x-4">
+                    <button id="cart-btn" class="relative p-2 text-dark-gray hover:text-sage-green transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.6 8M7 13v8a2 2 0 002 2h6a2 2 0 002-2v-8"/>
+                        </svg>
+                        <span id="cart-count" class="absolute -top-1 -right-1 bg-sage-green text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
+                    </button>
+                    
+                    <!-- Mobile menu button -->
+                    <button id="mobile-menu-btn" class="md:hidden p-2 text-dark-gray">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Navigation -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4">
+                <div class="flex flex-col space-y-2">
+                    <a href="#home" class="block px-3 py-2 text-dark-gray hover:text-sage-green transition-colors">Home</a>
+                    <a href="#products" class="block px-3 py-2 text-dark-gray hover:text-sage-green transition-colors">Products</a>
+                    <a href="#about" class="block px-3 py-2 text-dark-gray hover:text-sage-green transition-colors">About</a>
+                    <a href="#contact" class="block px-3 py-2 text-dark-gray hover:text-sage-green transition-colors">Contact</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden bg-white">
+        
+        <!-- Hero Content -->
+        <div class="relative z-10 text-center text-gray-800 max-w-4xl mx-auto px-4">
+            <div class="mb-6">
+                <span class="inline-block px-4 py-2 bg-sage-green/10 rounded-full text-sm font-medium mb-4 text-gray-700 border border-sage-green/20">
+                    ✨ Trusted by 50,000+ women across Europe
+                </span>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                Transform Your <br>
+                <span class="text-sage-green">Skin Journey</span>
+            </h1>
+            
+            <p class="text-xl md:text-2xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+                Discover premium skincare products that deliver visible results. 
+                Scientifically formulated for all skin types.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+                <a href="#products" class="bg-sage-green text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-sage-dark transition-colors shadow-lg">
+                    Shop Collection
+                </a>
+                <a href="#about" class="border-2 border-sage-green text-sage-green px-8 py-4 rounded-lg font-semibold text-lg hover:bg-sage-green hover:text-white transition-colors">
+                    Learn More
+                </a>
+            </div>
+            
+            <!-- Trust Indicators -->
+            <div class="flex flex-wrap justify-center items-center space-x-8 text-sm text-gray-500">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 text-sage-green mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Dermatologist Approved
+                </div>
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 text-sage-green mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Free Shipping
+                </div>
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 text-sage-green mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    30-Day Guarantee
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Featured Skincare</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
+                    High-quality skincare products for visible results
+                </p>
+                <div class="flex justify-center space-x-8 text-sm text-gray-500">
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 bg-sage-green rounded-full mr-2"></div>
+                        Quality Tested
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+                        Safe Formulas
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 bg-gold rounded-full mr-2"></div>
+                        Clean Ingredients
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Product Grid -->
+            <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Product cards will be dynamically generated -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6">Our Story</h2>
+                    <p class="text-lg text-gray-600 mb-6">
+                        Founded in 2020, Elite Store emerged from a passion for transformative skincare. 
+                        Our team of dermatology experts and beauty scientists work together to discover 
+                        breakthrough formulations that deliver real results.
+                    </p>
+                    <p class="text-lg text-gray-600 mb-8">
+                        Every product is carefully crafted with premium ingredients, rigorously tested, 
+                        and designed to address specific skin concerns while promoting overall skin health.
+                    </p>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-sage-green mb-2">50K+</div>
+                            <div class="text-sm text-gray-600">Happy Customers</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-sage-green mb-2">98%</div>
+                            <div class="text-sm text-gray-600">Satisfaction Rate</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl overflow-hidden">
+                        <img src="assets/sage-skincare-bg.svg" alt="Elite Store Products" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                        <div class="w-full h-full flex items-center justify-center text-gray-400 text-sm">
+                            Premium Skincare Collection
+                        </div>
+                    </div>
+                    <div class="absolute -bottom-6 -right-6 bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-sage-green rounded-full flex items-center justify-center mr-4">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-gray-800">Clinically Tested</div>
+                                <div class="text-sm text-gray-600">Dermatologist Approved</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">What Our Customers Say</h2>
+                <p class="text-xl text-gray-600 mb-8">Real reviews from real customers who love their skin transformation</p>
+                <div class="flex justify-center items-center space-x-2 mb-4">
+                    <div class="flex space-x-1">
+                        <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                        </svg>
+                        <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                        </svg>
+                    </div>
+                    <span class="text-gray-600 ml-2">4.9/5 from 2,847 reviews</span>
+                </div>
+            </div>
+            
+            <!-- Reviews Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center text-white font-bold mr-4">
+                            S
+                        </div>
+                        <div>
+                            <div class="font-semibold text-gray-800">Sarah Mitchell</div>
+                            <div class="flex text-yellow-400 text-sm">
+                                ★★★★★
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">
+                        "Amazing cleanser! My skin feels so clean yet gentle. I've been using this for 3 months now and the results are incredible. My blackheads have significantly reduced."
+                    </p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center text-white font-bold mr-4">
+                            M
+                        </div>
+                        <div>
+                            <div class="font-semibold text-gray-800">Maria Santos</div>
+                            <div class="flex text-yellow-400 text-sm">
+                                ★★★★★
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">
+                        "Great product! My skin feels so fresh and clean. Highly recommend for oily skin types. The packaging is also beautiful and premium."
+                    </p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center text-white font-bold mr-4">
+                            E
+                        </div>
+                        <div>
+                            <div class="font-semibold text-gray-800">Emma Rodriguez</div>
+                            <div class="flex text-yellow-400 text-sm">
+                                ★★★★★
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">
+                        "Perfect for sensitive skin. No irritation at all! This cleanser is a game-changer. Gentle yet effective, perfect for my sensitive acne-prone skin."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certifications & Guarantees Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Why Choose Elite Store</h2>
+                <p class="text-lg text-gray-600">Our commitment to skin health and beauty excellence</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="text-center group">
+                    <div class="w-16 h-16 bg-sage-green rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Premium Quality</h3>
+                    <p class="text-gray-600 text-sm">High-quality ingredients and formulation</p>
+                </div>
+                
+                <div class="text-center group">
+                    <div class="w-16 h-16 bg-sage-green rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Dermatologist Tested</h3>
+                    <p class="text-gray-600 text-sm">Clinically proven safe & effective</p>
+                </div>
+                
+                <div class="text-center group">
+                    <div class="w-16 h-16 bg-sage-green rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Customer Support</h3>
+                    <p class="text-gray-600 text-sm">Dedicated skincare assistance</p>
+                </div>
+                
+                                <div class="text-center group">
+                    <div class="w-16 h-16 bg-sage-green rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Money Back</h3>
+                    <p class="text-gray-600 text-sm">30-day guarantee</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-gray-800">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">Contact Our Skin Experts</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Get personalized skincare advice from our certified dermatology team.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div>
+                    <h3 class="text-2xl font-semibold mb-6 text-gray-800">Contact Information</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <svg class="w-6 h-6 text-sage-green mr-4 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                            <div>
+                                <div class="font-medium text-gray-800">Email</div>
+                                <div class="text-gray-600">support@elitestore.com</div>
+                                <div class="text-sm text-gray-500">Response within 2 hours</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <svg class="w-6 h-6 text-sage-green mr-4 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                            </svg>
+                            <div>
+                                <div class="font-medium text-gray-800">Phone</div>
+                                <div class="text-gray-600">+1 (555) 123-4567</div>
+                                <div class="text-sm text-gray-500">Available 24/7</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <form class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                            <input type="text" placeholder="John" class="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-sage-green focus:ring-2 focus:ring-sage-green/20">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                            <input type="text" placeholder="Doe" class="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-sage-green focus:ring-2 focus:ring-sage-green/20">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                        <input type="email" placeholder="john@example.com" class="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-sage-green focus:ring-2 focus:ring-sage-green/20">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+                        <select class="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-sage-green focus:ring-2 focus:ring-sage-green/20">
+                            <option>General Inquiry</option>
+                            <option>Product Support</option>
+                            <option>Partnership</option>
+                            <option>Press & Media</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                        <textarea placeholder="Tell us how we can help you..." rows="4" class="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-sage-green focus:ring-2 focus:ring-sage-green/20"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-sage-green text-white px-6 py-3 font-semibold rounded-lg hover:bg-sage-dark transition-colors">
+                        Send Message
+                    </button>
+                    <p class="text-xs text-gray-500 text-center">
+                        We respect your privacy. Your information is secure and never shared.
+                    </p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-charcoal text-cream py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <!-- Company Info -->
+                <div class="md:col-span-2">
+                    <div class="flex items-center mb-4">
+                        <div class="w-8 h-8 bg-forest rounded-lg flex items-center justify-center mr-3">
+                            <span class="text-cream font-bold text-sm">ES</span>
+                        </div>
+                        <div class="text-2xl font-bold">
+                            Elite<span class="text-gold">Store</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 mb-6 max-w-md">
+                        Transform your skin with our premium collection of scientifically-formulated skincare products. 
+                        Trusted by thousands worldwide.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-cream transition-colors">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-cream transition-colors">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.219-.359-1.219c0-1.142.662-1.995 1.482-1.995.699 0 1.037.219 1.037 1.142 0 .696-.442 1.737-.219 2.701.199.662.998 1.142 1.737 1.142 2.081 0 3.68-2.198 3.68-5.357 0-2.799-2.009-4.756-4.877-4.756-3.32 0-5.279 2.487-5.279 5.06 0 1.001.385 2.081.869 2.681.096.115.11.219.081.337-.09.375-.293 1.199-.333 1.363-.053.219-.174.265-.402.159-1.499-.696-2.436-2.885-2.436-4.638 0-3.78 2.75-7.25 7.929-7.25 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.357-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001.012.017 0-.001 12.017 0z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-cream transition-colors">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-400 hover:text-cream transition-colors">Home</a></li>
+                        <li><a href="#products" class="text-gray-400 hover:text-cream transition-colors">Products</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-cream transition-colors">About</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-cream transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Support -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-cream transition-colors">FAQ</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-cream transition-colors">Shipping</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-cream transition-colors">Returns</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-cream transition-colors">Size Guide</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Bottom Bar -->
+            <div class="border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm">
+                    © 2024 Elite Store. All rights reserved.
+                </p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="pages/privacy-policy.html" class="text-gray-400 hover:text-cream text-sm transition-colors">Privacy Policy</a>
+                    <a href="pages/terms-of-service.html" class="text-gray-400 hover:text-cream text-sm transition-colors">Terms of Service</a>
+                    <a href="pages/track-order.html" class="text-gray-400 hover:text-cream text-sm transition-colors">Track Order</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Sidebar -->
+    <div id="cart-sidebar" class="fixed inset-y-0 right-0 w-96 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out z-50">
+        <div class="flex flex-col h-full">
+            <!-- Cart Header -->
+            <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                <h2 class="text-xl font-semibold text-gray-900">Shopping Cart</h2>
+                <button id="close-cart" class="p-2 text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Cart Items -->
+            <div id="cart-items" class="flex-1 overflow-y-auto p-6">
+                <div id="empty-cart" class="text-center py-12">
+                    <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.6 8M7 13v8a2 2 0 002 2h6a2 2 0 002-2v-8"/>
+                    </svg>
+                    <p class="text-gray-500">Your cart is empty</p>
+                </div>
+            </div>
+            
+            <!-- Cart Footer -->
+            <div id="cart-footer" class="hidden border-t border-gray-200 p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-lg font-semibold">Total:</span>
+                    <span id="cart-total" class="text-xl font-bold text-sage-green">$0.00</span>
+                </div>
+                <button id="checkout-btn" class="w-full bg-sage-green text-white py-3 rounded-lg font-semibold hover:bg-sage-dark transition-colors">
+                    Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Overlay -->
+    <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40"></div>
+
+    <!-- Product Modal -->
+    <div id="product-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-7xl w-full max-h-[95vh] overflow-y-auto">
+            <div id="modal-content">
+                <!-- Modal content will be dynamically generated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-6xl w-full max-h-[95vh] overflow-y-auto">
+            <!-- Header -->
+            <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                <h2 class="text-xl font-semibold text-gray-900">Checkout</h2>
+                <button id="close-payment-modal" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <form id="payment-form">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-0">
+                    <!-- Left Column - Shipping & Payment (2/3 width) -->
+                    <div class="lg:col-span-2 p-6 border-r border-gray-200">
+                        <!-- Shipping Address Section -->
+                        <div class="mb-8">
+                            <h3 class="text-lg font-medium text-gray-900 mb-1">1. Shipping address</h3>
+                            <p class="text-sm text-gray-600 mb-2">Select a shipping address</p>
+                            <div class="bg-blue-50 border border-blue-200 rounded-md p-3 mb-4">
+                                <div class="flex items-center">
+                                    <span class="text-blue-600 mr-2">ℹ️</span>
+                                    <span class="text-sm text-blue-800">We currently deliver only to European countries</span>
+                                </div>
+                            </div>
+                            
+                            <div class="border border-gray-300 rounded-lg p-4 bg-gray-50">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Full name</label>
+                                        <div class="grid grid-cols-2 gap-2">
+                                            <input type="text" id="first-name" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500" placeholder="First name">
+                                            <input type="text" id="last-name" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500" placeholder="Last name">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Phone number</label>
+                                        <input type="tel" id="phone" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500" placeholder="Phone number">
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-4">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                                    <input type="text" id="address-line1" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500" placeholder="Street address">
+                                </div>
+                                
+                                <div class="mt-2">
+                                    <input type="text" id="address-line2" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500" placeholder="Apt, suite, unit, building, floor, etc. (optional)">
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">City</label>
+                                        <input type="text" id="city" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500" placeholder="City">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">State</label>
+                                        <input type="text" id="state" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500" placeholder="State">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">ZIP Code</label>
+                                        <input type="text" id="postal-code" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500" placeholder="ZIP Code">
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-4">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Country/Region</label>
+                                    <select id="country" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500">
+                                        <option value="">Select European Country</option>
+                                        <option value="AT">Austria</option>
+                                        <option value="BE">Belgium</option>
+                                        <option value="BG">Bulgaria</option>
+                                        <option value="HR">Croatia</option>
+                                        <option value="CY">Cyprus</option>
+                                        <option value="CZ">Czech Republic</option>
+                                        <option value="DK">Denmark</option>
+                                        <option value="EE">Estonia</option>
+                                        <option value="FI">Finland</option>
+                                        <option value="FR">France</option>
+                                        <option value="DE">Germany</option>
+                                        <option value="GR">Greece</option>
+                                        <option value="HU">Hungary</option>
+                                        <option value="IE">Ireland</option>
+                                        <option value="IT">Italy</option>
+                                        <option value="LV">Latvia</option>
+                                        <option value="LT">Lithuania</option>
+                                        <option value="LU">Luxembourg</option>
+                                        <option value="MT">Malta</option>
+                                        <option value="NL">Netherlands</option>
+                                        <option value="PL">Poland</option>
+                                        <option value="PT">Portugal</option>
+                                        <option value="RO">Romania</option>
+                                        <option value="SK">Slovakia</option>
+                                        <option value="SI">Slovenia</option>
+                                        <option value="ES">Spain</option>
+                                        <option value="SE">Sweden</option>
+                                        <option value="CH">Switzerland</option>
+                                        <option value="GB">United Kingdom</option>
+                                        <option value="NO">Norway</option>
+                                        <option value="IS">Iceland</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Payment Method Section -->
+                        <div class="mb-6">
+                            <h3 class="text-lg font-medium text-gray-900 mb-1">2. Payment method</h3>
+                            <p class="text-sm text-gray-600 mb-4">Select a payment method</p>
+                            
+                            <div class="border border-gray-300 rounded-lg p-4 bg-gray-50">
+                                <div class="mb-4">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                    <input type="email" id="email" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500" placeholder="Email address">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Credit or debit card</label>
+                                    <div id="card-element" class="p-3 border border-gray-300 rounded-md bg-white">
+                                        <!-- Stripe Elements will create form elements here -->
+                                    </div>
+                                    <div id="card-errors" class="text-red-600 text-sm mt-2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Column - Order Summary (1/3 width) -->
+                    <div class="lg:col-span-1 p-6 bg-gray-50">
+                        <div class="sticky top-6">
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">Order Summary</h3>
+                            
+                            <!-- Items -->
+                            <div id="checkout-items" class="space-y-4 mb-6">
+                                <!-- Items will be populated by JavaScript -->
+                            </div>
+                            
+                            <!-- Promo Code -->
+                            <div class="mb-6">
+                                <div class="flex">
+                                    <input type="text" placeholder="Enter promo code" class="flex-1 px-3 py-2 border border-gray-300 rounded-l-md text-sm focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500">
+                                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-700 border border-l-0 border-gray-300 rounded-r-md text-sm hover:bg-gray-300 transition-colors">Apply</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Order Total -->
+                            <div class="border-t border-gray-300 pt-4 space-y-3">
+                                <div class="flex justify-between text-sm">
+                                    <span>Items:</span>
+                                    <span id="subtotal">€0.00</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span>Shipping & handling:</span>
+                                    <span class="text-green-600">FREE in Europe</span>
+                                </div>
+                                <div class="border-t border-gray-300 pt-3">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-lg font-semibold text-red-600">Order total:</span>
+                                        <span id="checkout-total" class="text-lg font-semibold text-red-600">€0.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Place Order Button -->
+                            <button type="submit" id="submit-payment" class="w-full mt-6 bg-yellow-400 hover:bg-yellow-500 text-black py-3 rounded-lg font-medium transition-colors shadow-sm border border-yellow-500 disabled:opacity-50 disabled:cursor-not-allowed">
+                                <div class="flex items-center justify-center">
+                                    <div id="spinner" class="hidden animate-spin rounded-full h-4 w-4 border-b-2 border-black mr-2"></div>
+                                    <span id="button-text">Place your order</span>
+                                </div>
+                            </button>
+                            
+                            <!-- Security Notice -->
+                            <div class="mt-4 text-xs text-gray-600">
+                                <p class="mb-2">By placing your order, you agree to Elite Store's privacy notice and conditions of use.</p>
+                                <div class="space-y-1">
+                                    <div class="flex items-center space-x-1">
+                                        <span class="text-green-600">🔒</span>
+                                        <span>Secure transaction</span>
+                                    </div>
+                                    <div class="flex items-center space-x-1">
+                                        <span class="text-blue-600">🚚</span>
+                                        <span>Free delivery Germany (1-3 days)</span>
+                                    </div>
+                                    <div class="flex items-center space-x-1">
+                                        <span class="text-green-600">🌍</span>
+                                        <span>EU shipping €4.99 (3-7 days)</span>
+                                    </div>
+                                    <div class="flex items-center space-x-1">
+                                        <span class="text-green-600">💰</span>
+                                        <span>No additional taxes or fees</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>    <!-- Success Modal -->
+    <div id="success-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-8 text-center">
+            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Payment Successful!</h3>
+            <p class="text-gray-600 mb-6">Thank you for your purchase. You will receive a confirmation email shortly.</p>
+            <button id="close-success-modal" class="bg-sage-green text-white px-6 py-2 rounded-lg font-semibold hover:bg-sage-dark transition-colors">
+                Continue Shopping
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
+            </div>
+        </div>

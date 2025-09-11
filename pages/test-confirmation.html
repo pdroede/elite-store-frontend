@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Order Confirmation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-lg p-8 max-w-md w-full text-center">
+            <h1 class="text-2xl font-bold text-gray-900 mb-4">Test Order Confirmation</h1>
+            <p class="text-gray-600 mb-6">Click the button below to test the order confirmation page with sample data.</p>
+            
+            <button onclick="testOrderConfirmation()" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                Test Order Confirmation
+            </button>
+            
+            <div class="mt-6 pt-6 border-t">
+                <p class="text-sm text-gray-500">This will create sample order data and redirect to the confirmation page.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function testOrderConfirmation() {
+            // Create sample order data
+            const sampleOrder = {
+                orderNumber: 'ES-TEST' + Math.random().toString(36).substr(2, 5).toUpperCase(),
+                customerInfo: {
+                    name: 'João Silva',
+                    email: 'joao.silva@email.com',
+                    phone: '+351 912 345 678'
+                },
+                shippingAddress: {
+                    street: 'Rua das Flores, 123',
+                    city: 'Lisboa',
+                    postalCode: '1200-001',
+                    country: 'Portugal'
+                },
+                items: [
+                    {
+                        name: 'ANUA Heartleaf Pore Control Cleansing Oil',
+                        quantity: 2,
+                        price: 35.99,
+                        image: '../assets/products/anua-cleanser-1.jpg'
+                    }
+                ],
+                totals: {
+                    subtotal: 71.98,
+                    shipping: 0.00,
+                    total: 71.98
+                },
+                orderDate: new Date().toISOString(),
+                estimatedDelivery: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+                status: 'confirmed'
+            };
+
+            // Save to localStorage
+            localStorage.setItem('lastOrder', JSON.stringify(sampleOrder));
+            
+            // Redirect to confirmation page
+            window.location.href = 'order-confirmation.html';
+        }
+    </script>
+</body>
+</html>

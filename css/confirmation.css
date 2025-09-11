@@ -1,0 +1,113 @@
+/* Order Confirmation Page Styles */
+
+/* Print Styles */
+@media print {
+    header, footer, .no-print {
+        display: none !important;
+    }
+    
+    body {
+        background: white !important;
+    }
+    
+    .bg-white {
+        background: white !important;
+        border: 1px solid #e5e7eb !important;
+    }
+    
+    .shadow-sm {
+        box-shadow: none !important;
+    }
+}
+
+/* Map Container */
+#map {
+    position: relative;
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+}
+
+#map::before {
+    content: "Loading map...";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #6b7280;
+    font-size: 14px;
+}
+
+/* Order Status Timeline */
+.timeline-item {
+    position: relative;
+}
+
+.timeline-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 24px;
+    bottom: -16px;
+    width: 2px;
+    background: #e5e7eb;
+}
+
+.timeline-item.completed:not(:last-child)::after {
+    background: #10b981;
+}
+
+/* Custom Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .grid-cols-1.lg\\:grid-cols-2 {
+        gap: 1rem;
+    }
+    
+    #map {
+        height: 200px;
+    }
+}
+
+/* Custom color utilities */
+.text-sage-green {
+    color: #7A9A76;
+}
+
+.bg-sage-green {
+    background-color: #7A9A76;
+}
+
+.bg-sage-dark {
+    background-color: #5F7A5B;
+}
+
+.hover\\:bg-sage-green:hover {
+    background-color: #7A9A76;
+}
+
+.hover\\:bg-sage-dark:hover {
+    background-color: #5F7A5B;
+}
+
+/* Order item styles */
+.order-item {
+    transition: all 0.2s ease;
+}
+
+.order-item:hover {
+    background-color: #f9fafb;
+}

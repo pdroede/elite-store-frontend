@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Order Flow - Elite Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-8">
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-2xl font-bold mb-6">Test Order Flow</h1>
+        
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-4">Simulate Complete Order</h2>
+            <p class="text-gray-600 mb-4">This will create a test order with the data you enter and redirect to confirmation page.</p>
+            
+            <form id="testOrderForm" class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                        <input type="text" id="firstName" class="w-full border border-gray-300 rounded-md px-3 py-2" value="João" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                        <input type="text" id="lastName" class="w-full border border-gray-300 rounded-md px-3 py-2" value="Silva" required>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                    <input type="email" id="email" class="w-full border border-gray-300 rounded-md px-3 py-2" value="joao.silva@email.com" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                    <input type="tel" id="phone" class="w-full border border-gray-300 rounded-md px-3 py-2" value="+351912345678" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Street Address</label>
+                    <input type="text" id="street" class="w-full border border-gray-300 rounded-md px-3 py-2" value="Rua das Flores, 123" required>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">City</label>
+                        <input type="text" id="city" class="w-full border border-gray-300 rounded-md px-3 py-2" value="Lisboa" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Postal Code</label>
+                        <input type="text" id="postalCode" class="w-full border border-gray-300 rounded-md px-3 py-2" value="1200-001" required>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Order Total (€)</label>
+                    <input type="number" id="orderTotal" class="w-full border border-gray-300 rounded-md px-3 py-2" value="35.99" step="0.01" required>
+                </div>
+                
+                <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700">
+                    Create Test Order & Go to Confirmation
+                </button>
+            </form>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-lg font-semibold mb-4">Current localStorage</h2>
+            <pre id="localStorageDisplay" class="bg-gray-100 p-4 rounded text-sm overflow-auto max-h-48"></pre>
+            <button onclick="updateDisplay()" class="mt-2 bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
+                Refresh
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function updateDisplay() {
+            const display = document.getElementById('localStorageDisplay');
+            const lastOrder = localStorage.getItem('lastOrder');
+            
+            if (lastOrder) {
+                try {
+                    const parsed = JSON.parse(lastOrder);
+                    display.textContent = JSON.stringify(parsed, null, 2);
+                } catch (e) {
+                    display.textContent = 'Error parsing: ' + lastOrder;
+                }
+            } else {
+                display.textContent = 'No lastOrder found in localStorage';
+            }
+        }
+        
+        document.getElementById('testOrderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                street: document.getElementById('street').value,
+                city: document.getElementById('city').value,
+                postalCode: document.getElementById('postalCode').value,
+                orderTotal: parseFloat(document.getElementById('orderTotal').value)
+            };
+            
+            const testOrder = {
+                orderNumber: 'ES-TEST' + Date.now().toString().slice(-6),
+                customerInfo: {
+                    name: `${formData.firstName} ${formData.lastName}`,
+                    email: formData.email,
+                    phone: formData.phone
+                },
+                shippingAddress: {
+                    street: formData.street,
+                    city: formData.city,
+                    postalCode: formData.postalCode,
+                    country: 'Portugal'
+                },
+                paymentInfo: {
+                    cardLast4: '4242',
+                    cardBrand: 'visa'
+                },
+                items: [
+                    {
+                        name: 'Test Product',
+                        quantity: 1,
+                        price: formData.orderTotal,
+                        image: '../assets/products/anua-cleanser-1.jpg'
+                    }
+                ],
+                totals: {
+                    subtotal: formData.orderTotal,
+                    shipping: 0.00,
+                    total: formData.orderTotal
+                },
+                orderDate: new Date().toISOString(),
+                estimatedDelivery: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+                status: 'confirmed'
+            };
+            
+            console.log('Creating test order:', testOrder);
+            localStorage.setItem('lastOrder', JSON.stringify(testOrder));
+            
+            updateDisplay();
+            
+            // Redirect after a short delay
+            setTimeout(() => {
+                window.location.href = 'order-confirmation.html';
+            }, 500);
+        });
+        
+        // Update display on page load
+        updateDisplay();
+    </script>
+</body>
+</html>

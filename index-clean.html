@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuxeSkin - Premium Skincare Collection</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Stripe.js -->
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'gold': '#FFD700',
+                        'yellow': '#FFEB3B',      
+                        'yellow-dark': '#FFC107',  
+                        'sage-green': '#7A9A76',
+                        'sage-dark': '#5F7A5B',
+                        'sage-light': '#A8C5A4',
+                        'dark-gray': '#1a1a1a',
+                        'light-gray': '#f8f9fa'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-inter text-dark-gray bg-white">
+    <!-- Fixed Header -->
+    <header class="fixed top-0 w-full bg-white/95 backdrop-blur-md z-50 border-b border-gray-200">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="w-8 h-8 bg-sage-green rounded-lg flex items-center justify-center mr-3">
+                        <span class="text-white font-bold text-sm">LS</span>
+                    </div>
+                    <div class="text-2xl font-bold">
+                        Luxe<span class="text-sage-green">Skin</span>
+                    </div>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="text-dark-gray hover:text-sage-green transition-colors">Home</a>
+                    <a href="#products" class="text-dark-gray hover:text-sage-green transition-colors">Products</a>
+                    <a href="#about" class="text-dark-gray hover:text-sage-green transition-colors">About</a>
+                    <a href="#contact" class="text-dark-gray hover:text-sage-green transition-colors">Contact</a>
+                </div>
+                
+                <!-- Cart and Mobile Menu -->
+                <div class="flex items-center space-x-4">
+                    <button id="cart-btn" class="relative p-2 text-dark-gray hover:text-sage-green transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.6 8M7 13v8a2 2 0 002 2h6a2 2 0 002-2v-8"/>
+                        </svg>
+                        <span id="cart-count" class="absolute -top-1 -right-1 bg-sage-green text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
+                    </button>
+                    
+                    <!-- Mobile menu button -->
+                    <button id="mobile-menu-btn" class="md:hidden p-2 text-dark-gray">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Navigation -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4">
+                <div class="flex flex-col space-y-2">
+                    <a href="#home" class="block px-3 py-2 text-dark-gray hover:text-sage-green transition-colors">Home</a>
+                    <a href="#products" class="block px-3 py-2 text-dark-gray hover:text-sage-green transition-colors">Products</a>
+                    <a href="#about" class="block px-3 py-2 text-dark-gray hover:text-sage-green transition-colors">About</a>
+                    <a href="#contact" class="block px-3 py-2 text-dark-gray hover:text-sage-green transition-colors">Contact</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden bg-white">
+        
+        <!-- Hero Content -->
+        <div class="relative z-10 text-center text-gray-800 max-w-4xl mx-auto px-4">
+            <div class="mb-6">
+                <span class="inline-block px-4 py-2 bg-sage-green/10 rounded-full text-sm font-medium mb-4 text-gray-700 border border-sage-green/20">
+                    ✨ Trusted by 50,000+ women across Europe
+                </span>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                Transform Your <br>
+                <span class="text-sage-green">Skin Journey</span>
+            </h1>
+            
+            <p class="text-xl md:text-2xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+                Discover premium skincare products that deliver visible results. 
+                Scientifically formulated for all skin types.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+                <a href="#products" class="bg-sage-green text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-sage-dark transition-colors shadow-lg">
+                    Shop Collection
+                </a>
+                <a href="#about" class="border-2 border-sage-green text-sage-green px-8 py-4 rounded-lg font-semibold text-lg hover:bg-sage-green hover:text-white transition-colors">
+                    Learn More
+                </a>
+            </div>
+            
+            <!-- Trust Indicators -->
+            <div class="flex flex-wrap justify-center items-center space-x-8 text-sm text-gray-500">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 text-sage-green mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Dermatologist Approved
+                </div>
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 text-sage-green mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Free Shipping
+                </div>
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 text-sage-green mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    30-Day Guarantee
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Featured Skincare</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
+                    High-quality skincare products for visible results
+                </p>
+                <div class="flex justify-center space-x-8 text-sm text-gray-500">
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 bg-sage-green rounded-full mr-2"></div>
+                        Quality Tested
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+                        Safe Formulas
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 bg-gold rounded-full mr-2"></div>
+                        Clean Ingredients
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Product Grid -->
+            <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Product cards will be dynamically generated -->
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>

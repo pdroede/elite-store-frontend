@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - Elite Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/confirmation.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sage-green': '#7A9A76',
+                        'sage-dark': '#5F7A5B',
+                        'forest': '#2d4a2b',
+                        'dark-gray': '#1a1a1a'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-inter bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="w-8 h-8 bg-sage-green rounded-lg flex items-center justify-center mr-3">
+                        <span class="text-white font-bold text-sm">ES</span>
+                    </div>
+                    <div class="text-2xl font-bold">
+                        Elite<span class="text-sage-green">Store</span>
+                    </div>
+                </div>
+                
+                <!-- Order Status -->
+                <div class="text-sm text-gray-600">
+                    <span class="text-green-600 font-medium">✓ Order Confirmed</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Thank You Section -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8 mb-8 text-center">
+            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Thank you for your order!</h1>
+            <p class="text-lg text-gray-600 mb-4">Your order has been confirmed and will be shipped soon.</p>
+            <div class="bg-gray-50 rounded-lg p-4 inline-block">
+                <p class="text-sm text-gray-600">Order Number</p>
+                <p class="text-xl font-semibold text-gray-900" id="orderNumber">Loading...</p>
+            </div>
+        </div>
+
+        <!-- Order Details Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Left Column - Order Details -->
+            <div class="space-y-6">
+                <!-- Order Summary -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Order Summary</h2>
+                    <div id="orderItems" class="space-y-4">
+                        <p class="text-gray-600">Loading items...</p>
+                    </div>
+                    
+                    <!-- Order Total -->
+                    <div class="border-t border-gray-200 mt-6 pt-4">
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-sm">
+                                <span>Items:</span>
+                                <span id="orderSubtotal">Loading...</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span>Shipping & handling:</span>
+                                <span id="orderShipping" class="text-green-600">Loading...</span>
+                            </div>
+                            <div class="border-t border-gray-200 pt-2">
+                                <div class="flex justify-between font-semibold">
+                                    <span>Order total:</span>
+                                    <span id="orderTotal" class="text-sage-green">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer Information -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Customer Information</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Full Name</label>
+                            <p id="customerName" class="text-gray-900">Loading...</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Email</label>
+                            <p id="customerEmail" class="text-gray-900">Loading...</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Phone</label>
+                            <p id="customerPhone" class="text-gray-900">Loading...</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Order Date</label>
+                            <p id="orderDate" class="text-gray-900">Loading...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Information -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Payment Information</h2>
+                    <div class="flex items-center">
+                        <svg class="w-8 h-8 text-blue-600 mr-3" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+                        </svg>
+                        <div>
+                            <p class="font-medium text-gray-900" id="cardInfo">Credit Card ending in 4242</p>
+                            <p class="text-sm text-gray-600" id="cardBrand">Visa</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Shipping Details & Map -->
+            <div class="space-y-6">
+                <!-- Shipping Address -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Shipping Address</h2>
+                    <div id="shippingAddress" class="space-y-2">
+                        <p class="text-gray-600">Loading address...</p>
+                    </div>
+                </div>
+
+                <!-- Delivery Map -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Delivery Location</h2>
+                    <div id="map" class="w-full h-64 bg-gradient-to-br from-sage-green to-sage-dark rounded-lg overflow-hidden flex items-center justify-center">
+                        <!-- Map Placeholder -->
+                        <div class="text-center text-white">
+                            <svg class="w-16 h-16 mx-auto mb-4 opacity-80" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                            <p class="text-lg font-medium mb-2">Delivery Location</p>
+                            <p class="text-sm opacity-90" id="delivery-address">Your order will be delivered to the address provided</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            <div>
+                                <p class="text-sm font-medium text-blue-800">Estimated Delivery</p>
+                                <p class="text-sm text-blue-600" id="estimatedDelivery">Loading...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tracking Information -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Order Tracking</h2>
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 bg-green-500 rounded-full mr-4"></div>
+                            <div>
+                                <p class="font-medium text-gray-900">Order Confirmed</p>
+                                <p class="text-sm text-gray-600">September 9, 2025 - 2:30 PM</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 bg-gray-300 rounded-full mr-4"></div>
+                            <div>
+                                <p class="font-medium text-gray-500">Processing</p>
+                                <p class="text-sm text-gray-400">Expected: September 10, 2025</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 bg-gray-300 rounded-full mr-4"></div>
+                            <div>
+                                <p class="font-medium text-gray-500">Shipped</p>
+                                <p class="text-sm text-gray-400">Expected: September 11, 2025</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 bg-gray-300 rounded-full mr-4"></div>
+                            <div>
+                                <p class="font-medium text-gray-500">Delivered</p>
+                                <p class="text-sm text-gray-400">Expected: September 12-14, 2025</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+            <button onclick="window.print()" class="bg-white text-gray-700 border border-gray-300 px-6 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+                Print Order Details
+            </button>
+            <button onclick="sendEmail()" class="bg-sage-green text-white px-6 py-3 rounded-lg font-medium hover:bg-sage-dark transition-colors">
+                Email Order Summary
+            </button>
+            <a href="../index.html" class="bg-yellow-400 text-black px-6 py-3 rounded-lg font-medium hover:bg-yellow-500 transition-colors text-center">
+                Continue Shopping
+            </a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center mb-4">
+                    <div class="w-8 h-8 bg-forest rounded-lg flex items-center justify-center mr-3">
+                        <span class="text-white font-bold text-sm">ES</span>
+                    </div>
+                    <div class="text-2xl font-bold">
+                        Elite<span class="text-sage-green">Store</span>
+                    </div>
+                </div>
+                <p class="text-gray-600 mb-4">Thank you for choosing Elite Store for your skincare needs.</p>
+                <div class="flex justify-center space-x-6 text-sm text-gray-600">
+                    <a href="track-order.html" class="hover:text-sage-green">Track Your Order</a>
+                    <a href="../index.html#contact" class="hover:text-sage-green">Customer Service</a>
+                    <a href="terms-of-service.html" class="hover:text-sage-green">Return Policy</a>
+                    <a href="../index.html#contact" class="hover:text-sage-green">Contact Us</a>
+                </div>
+                <p class="text-sm text-gray-500 mt-4">© 2024 Elite Store. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Load Google Maps API -->
+    <!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script> -->
+    <script src="../js/order-confirmation.js"></script>
+</body>
+</html>

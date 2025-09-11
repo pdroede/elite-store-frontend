@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocalStorage Debug - Elite Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-2xl font-bold mb-6">Debug LocalStorage</h1>
+        
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-4">Current LocalStorage Data</h2>
+            <pre id="localStorage-content" class="bg-gray-100 p-4 rounded text-sm overflow-auto max-h-96"></pre>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-lg font-semibold mb-4">Actions</h2>
+            <div class="space-x-4">
+                <button onclick="checkLocalStorage()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    Refresh LocalStorage
+                </button>
+                <button onclick="clearLocalStorage()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+                    Clear LocalStorage
+                </button>
+                <button onclick="createTestOrder()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                    Create Test Order
+                </button>
+                <button onclick="goToConfirmation()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">
+                    Go to Confirmation
+                </button>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-lg font-semibold mb-4">Test Results</h2>
+            <div id="test-results" class="text-sm"></div>
+        </div>
+    </div>
+
+    <script>
+        function checkLocalStorage() {
+            const container = document.getElementById('localStorage-content');
+            const results = document.getElementById('test-results');
+            
+            const allData = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const value = localStorage.getItem(key);
+                try {
+                    allData[key] = JSON.parse(value);
+                } catch (e) {
+                    allData[key] = value;
+                }
+            }
+            
+            container.textContent = JSON.stringify(allData, null, 2);
+            
+            // Check specifically for lastOrder
+            const lastOrder = localStorage.getItem('lastOrder');
+            if (lastOrder) {
+                results.innerHTML = `
+                    <div class="text-green-600 font-semibold">✅ lastOrder found in localStorage</div>
+                    <div class="mt-2">Size: ${lastOrder.length} characters</div>
+                `;
+            } else {
+                results.innerHTML = `<div class="text-red-600 font-semibold">❌ No lastOrder found in localStorage</div>`;
+            }
+        }
+        
+        function clearLocalStorage() {
+            localStorage.clear();
+            checkLocalStorage();
+        }
+        
+        function createTestOrder() {
+            const testOrder = {
+                orderNumber: 'ES-TEST123',
+                customerInfo: {
+                    name: 'Debug User',
+                    email: 'debug@test.com',
+                    phone: '+351999888777'
+                },
+                shippingAddress: {
+                    street: 'Debug Street, 999',
+                    city: 'Debug City',
+                    postalCode: '9999-999',
+                    country: 'Debug Country'
+                },
+                paymentInfo: {
+                    cardLast4: '9999',
+                    cardBrand: 'debug'
+                },
+                items: [
+                    {
+                        name: 'Debug Product',
+                        quantity: 1,
+                        price: 99.99,
+                        image: 'debug.jpg'
+                    }
+                ],
+                totals: {
+                    subtotal: 99.99,
+                    shipping: 0.00,
+                    total: 99.99
+                },
+                orderDate: new Date().toISOString(),
+                estimatedDelivery: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+                status: 'confirmed'
+            };
+            
+            localStorage.setItem('lastOrder', JSON.stringify(testOrder));
+            checkLocalStorage();
+            
+            document.getElementById('test-results').innerHTML += `
+                <div class="text-blue-600 mt-2">💾 Test order created and saved to localStorage</div>
+            `;
+        }
+        
+        function goToConfirmation() {
+            window.location.href = 'order-confirmation.html';
+        }
+        
+        // Load data on page load
+        checkLocalStorage();
+    </script>
+</body>
+</html>

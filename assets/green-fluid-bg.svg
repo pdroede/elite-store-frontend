@@ -1,0 +1,65 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fundo inspirado na imagem verde com texturas fluidas -->
+  <defs>
+    <!-- Gradiente principal verde suave -->
+    <linearGradient id="greenFluid" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#B8D4B2;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#A8C5A4;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#95B891;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8FB08B;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Gradiente para as ondas fluidas -->
+    <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#C4D8BE;stop-opacity:0.8" />
+      <stop offset="50%" style="stop-color:#A8C5A4;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#95B891;stop-opacity:0.4" />
+    </linearGradient>
+    
+    <!-- Filtro para as bolhas -->
+    <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="2"/>
+    </filter>
+  </defs>
+  
+  <!-- Fundo base -->
+  <rect width="1920" height="1080" fill="url(#greenFluid)"/>
+  
+  <!-- Ondas fluidas principais -->
+  <path d="M0,300 Q480,200 960,300 T1920,250 L1920,600 Q1440,500 960,600 T0,550 Z" 
+        fill="url(#waveGradient)" opacity="0.6"/>
+  
+  <path d="M0,500 Q480,400 960,500 T1920,450 L1920,800 Q1440,700 960,800 T0,750 Z" 
+        fill="url(#waveGradient)" opacity="0.4"/>
+  
+  <!-- Ondas secundárias -->
+  <path d="M0,150 Q300,100 600,150 Q900,200 1200,150 Q1500,100 1800,150 L1920,150 L1920,350 Q1600,300 1300,350 Q1000,400 700,350 Q400,300 100,350 L0,350 Z" 
+        fill="#C4D8BE" opacity="0.3"/>
+  
+  <!-- Bolhas grandes -->
+  <circle cx="300" cy="200" r="40" fill="#FFFFFF" opacity="0.4" filter="url(#blur)"/>
+  <circle cx="1400" cy="300" r="35" fill="#FFFFFF" opacity="0.3" filter="url(#blur)"/>
+  <circle cx="800" cy="500" r="45" fill="#FFFFFF" opacity="0.35" filter="url(#blur)"/>
+  <circle cx="1600" cy="700" r="30" fill="#FFFFFF" opacity="0.4" filter="url(#blur)"/>
+  
+  <!-- Bolhas médias -->
+  <circle cx="150" cy="400" r="20" fill="#FFFFFF" opacity="0.5"/>
+  <circle cx="1200" cy="150" r="18" fill="#FFFFFF" opacity="0.4"/>
+  <circle cx="600" cy="800" r="25" fill="#FFFFFF" opacity="0.45"/>
+  <circle cx="1700" cy="500" r="15" fill="#FFFFFF" opacity="0.5"/>
+  
+  <!-- Bolhas pequenas */
+  <circle cx="200" cy="600" r="8" fill="#FFFFFF" opacity="0.6"/>
+  <circle cx="1000" cy="250" r="6" fill="#FFFFFF" opacity="0.7"/>
+  <circle cx="1500" cy="600" r="10" fill="#FFFFFF" opacity="0.5"/>
+  <circle cx="400" cy="350" r="7" fill="#FFFFFF" opacity="0.6"/>
+  <circle cx="1300" cy="800" r="9" fill="#FFFFFF" opacity="0.55"/>
+  <circle cx="750" cy="100" r="5" fill="#FFFFFF" opacity="0.7"/>
+  
+  <!-- Micro bolhas espalhadas -->
+  <circle cx="100" cy="150" r="3" fill="#FFFFFF" opacity="0.8"/>
+  <circle cx="500" cy="450" r="4" fill="#FFFFFF" opacity="0.6"/>
+  <circle cx="900" cy="350" r="3" fill="#FFFFFF" opacity="0.7"/>
+  <circle cx="1100" cy="650" r="4" fill="#FFFFFF" opacity="0.6"/>
+  <circle cx="1800" cy="200" r="3" fill="#FFFFFF" opacity="0.8"/>
+</svg>
