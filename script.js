@@ -150,8 +150,8 @@ class EliteStore {
                 return;
             }
             
-            // Initialize Stripe with your publishable key (TEST MODE)
-            this.stripe = Stripe('pk_test_51RhRw1KC1EgAKi0LV547I6dGQm7fmP8tIYnMUPiVCe7Kz8ZV1Bll4AXnL9QzP3mQ8OHRSTsVkyNc5mjeEfiY9F0s00XuHO5kQ8');
+            // Initialize Stripe with your LIVE publishable key
+            this.stripe = Stripe('pk_live_51RhRw1KC1EgAKi0LwBZCBElUcxRfaECrpVxpQQX4F9lKoACATGhmYjlr2YMkXcEWPymXjQ8wtvVp2qfarQ6ZX8y600a6JhuhGe');
             
             // Create elements instance
             this.elements = this.stripe.elements();
@@ -174,8 +174,8 @@ class EliteStore {
                 },
             });
             
-            console.log('🧪 Stripe initialized successfully (TEST MODE)');
-            console.log('💳 Use test card: 4242 4242 4242 4242');
+            console.log('🚀 Stripe initialized successfully (LIVE MODE - REAL PAYMENTS)');
+            console.log('⚠️ WARNING: Using live keys - real money will be charged!');
         } catch (error) {
             console.error('Failed to initialize Stripe:', error);
         }
