@@ -11,7 +11,10 @@ class EliteStore {
         this.elements = null;
         this.cardElement = null;
         this.isProcessingPayment = false;
-        this.API_BASE_URL = 'https://elite-store-backend.onrender.com/api';
+        // Backend URL - Render deployment
+        this.API_BASE_URL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:3001/api'
+            : 'https://elite-store-backend.onrender.com/api';
         this.init();
     }
 
@@ -36,6 +39,26 @@ class EliteStore {
                     <img src="${imageSrc}" alt="${productName}" class="w-full h-full object-cover rounded-2xl" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
                     <span class="text-gray-400 text-lg hidden">Product Image Gallery</span>
                 `;
+                
+                // Detectar qual variação foi selecionada baseada na imagem
+                const currentProduct = this.currentModalProduct;
+                if (currentProduct && currentProduct.variants) {
+                    const variant = currentProduct.variants.find(v => 
+                        v.images && v.images.includes(imageSrc)
+                    );
+                    
+                    if (variant) {
+                        // Atualizar a variação selecionada
+                        const variantButtons = document.querySelectorAll(`input[name="variant-${currentProduct.id}"]`);
+                        variantButtons.forEach(btn => {
+                            if (btn.value === variant.type) {
+                                btn.checked = true;
+                                // Disparar evento de mudança para atualizar preço
+                                btn.dispatchEvent(new Event('change'));
+                            }
+                        });
+                    }
+                }
             }
         };
 
@@ -150,8 +173,8 @@ class EliteStore {
                 return;
             }
             
-            // Initialize Stripe with your LIVE publishable key
-            this.stripe = Stripe('pk_live_51RhRw1KC1EgAKi0LwBZCBElUcxRfaECrpVxpQQX4F9lKoACATGhmYjlr2YMkXcEWPymXjQ8wtvVp2qfarQ6ZX8y600a6JhuhGe');
+            // Initialize Stripe with your publishable key (TEST MODE)
+            this.stripe = Stripe('pk_test_51RhRw1KC1EgAKi0LV547I6dGQm7fmP8tIYnMUPiVCe7Kz8ZV1Bll4AXnL9QzP3mQ8OHRSTsVkyNc5mjeEfiY9F0s00XuHO5kQ8');
             
             // Create elements instance
             this.elements = this.stripe.elements();
@@ -174,8 +197,8 @@ class EliteStore {
                 },
             });
             
-            console.log('🚀 Stripe initialized successfully (LIVE MODE - REAL PAYMENTS)');
-            console.log('⚠️ WARNING: Using live keys - real money will be charged!');
+            console.log('🧪 Stripe initialized successfully (TEST MODE)');
+            console.log('💳 Use test card: 4242 4242 4242 4242');
         } catch (error) {
             console.error('Failed to initialize Stripe:', error);
         }
@@ -210,7 +233,7 @@ class EliteStore {
             {
                 id: 1,
                 name: "Anua Heartleaf Pore Deep Cleansing Foam",
-                price: 16.99,
+                price: 11.99,
                 originalPrice: 24.99,
                 image: "assets/products/anua-cleanser-1.png",
                 gallery: [
@@ -228,6 +251,32 @@ class EliteStore {
                 howToUse: "Apply a small amount to wet hands and work into a rich lather. Gently massage onto face, avoiding eye area. Rinse thoroughly with lukewarm water. Use morning and evening.",
                 benefits: ["Removes blackheads and whiteheads", "Controls excess oil", "Soothes irritated skin", "Prevents breakouts"],
                 skinType: "All skin types, especially oily and acne-prone",
+                // Variações do produto (como AliExpress)
+                variants: [
+                    {
+                        id: "single",
+                        name: "Single Product",
+                        price: 11.99,
+                        originalPrice: 24.99,
+                        image: "assets/products/anua-cleanser-1.png",
+                        description: "Anua Heartleaf Pore Deep Cleansing Foam - 150ml",
+                        inStock: true
+                    },
+                    {
+                        id: "bundle",
+                        name: "Bundle (2 Products)",
+                        price: 19.99,
+                        originalPrice: 24.98,
+                        image: "assets/products/anua-bundle-real.jpg",
+                        description: "Foam Cleanser + Oil Cleanser - Complete Double Cleansing Set",
+                        inStock: true,
+                        savings: 4.99,
+                        bundleProducts: [
+                            { name: "Anua Heartleaf Pore Deep Cleansing Foam", originalPrice: 11.99 },
+                            { name: "Anua Heartleaf Pore Control Cleansing Oil", originalPrice: 12.99 }
+                        ]
+                    }
+                ],
                 reviews_data: [
                     {
                         name: "Sarah M.",
@@ -249,6 +298,133 @@ class EliteStore {
                         text: "Perfect for sensitive skin. No irritation at all! This cleanser is a game-changer. Gentle yet effective, perfect for my sensitive acne-prone skin.",
                         verified: true,
                         date: "2024-08-05"
+                    }
+                ]
+            },
+            {
+                id: 2,
+                name: "Anua Heartleaf Pore Control Cleansing Oil",
+                price: 12.99,
+                originalPrice: 28.99,
+                image: "assets/products/cleanser-oil.jpg",
+                gallery: [
+                    "assets/products/cleanser-oil.jpg",
+                    "assets/products/anua-cleanser-2.png"
+                ],
+                rating: 4.9,
+                reviews: 2156,
+                category: "Cleansing Oils",
+                description: "Premium double-cleansing oil infused with Heartleaf extract and natural oils. Effectively removes makeup, sunscreen, and impurities while maintaining skin's moisture barrier. Perfect first step in Korean skincare routine.",
+                features: ["Heartleaf Extract", "Double Cleansing", "Makeup Removal", "Pore Control", "Non-Comedogenic", "Suitable for All Skin Types"],
+                ingredients: "Ethylhexyl Palmitate, Cetyl Ethylhexanoate, Sorbeth-30 Tetraoleate, Houttuynia Cordata Extract, Rosmarinus Officinalis Leaf Oil, Salvia Officinalis Oil, Lavandula Angustifolia Oil",
+                size: "200ml / 6.76 fl. oz",
+                brand: "Anua",
+                howToUse: "Apply 2-3 pumps to dry face and gently massage for 30-60 seconds. Add a small amount of water to emulsify, then rinse thoroughly with lukewarm water. Follow with water-based cleanser.",
+                benefits: ["Removes stubborn makeup", "Deep pore cleansing", "Controls sebum production", "Maintains moisture balance", "Prevents clogged pores"],
+                skinType: "All skin types, especially combination and oily skin",
+                customerReviews: [
+                    {
+                        name: "Jessica L.",
+                        rating: 5,
+                        comment: "The best cleansing oil I've ever used! Removes all my makeup effortlessly and leaves my skin feeling soft and clean. No breakouts even after 2 months of daily use."
+                    },
+                    {
+                        name: "Sophia Chen",
+                        rating: 5,
+                        comment: "Holy grail product! This oil cleanser melts away waterproof makeup like magic. My pores look visibly smaller after using this consistently for 6 weeks."
+                    },
+                    {
+                        name: "Ashley K.",
+                        rating: 5,
+                        comment: "Perfect for double cleansing routine. Gentle on sensitive skin but powerful enough to remove stubborn sunscreen. Love the lightweight texture that doesn't leave residue."
+                    },
+                    {
+                        name: "Maya Rodriguez",
+                        rating: 4,
+                        comment: "Great cleansing oil for the price point. Removes makeup well and doesn't irritate my acne-prone skin. The Heartleaf extract really helps with inflammation."
+                    },
+                    {
+                        name: "Emma Thompson",
+                        rating: 5,
+                        comment: "Game changer for my skincare routine! This oil cleanser has helped reduce my blackheads significantly. The pump dispenser is also very convenient."
+                    },
+                    {
+                        name: "Luna Park",
+                        rating: 5,
+                        comment: "Amazing product! I've been using K-beauty for years and this is definitely one of the best cleansing oils. Leaves skin super clean but not stripped of moisture."
+                    },
+                    {
+                        name: "Isabella Martin",
+                        rating: 4,
+                        comment: "Really effective at removing makeup and sunscreen. The Heartleaf ingredient is perfect for my sensitive, redness-prone skin. Will definitely repurchase!"
+                    },
+                    {
+                        name: "Chloe Johnson",
+                        rating: 5,
+                        comment: "This cleansing oil is incredible! It emulsifies beautifully and rinses clean without leaving any greasy residue. My skin has never looked better since starting double cleansing with this."
+                    }
+                ],
+                reviews_data: [
+                    {
+                        name: "Jessica L.",
+                        rating: 5,
+                        text: "The best cleansing oil I've ever used! Removes all my makeup effortlessly and leaves my skin feeling soft and clean. No breakouts even after 2 months of daily use.",
+                        verified: true,
+                        date: "2024-09-10"
+                    },
+                    {
+                        name: "Sophia Chen",
+                        rating: 5,
+                        text: "Holy grail product! This oil cleanser melts away waterproof makeup like magic. My pores look visibly smaller after using this consistently for 6 weeks.",
+                        verified: true,
+                        date: "2024-09-08"
+                    },
+                    {
+                        name: "Ashley K.",
+                        rating: 5,
+                        text: "Perfect for double cleansing routine. Gentle on sensitive skin but powerful enough to remove stubborn sunscreen. Love the lightweight texture that doesn't leave residue.",
+                        verified: true,
+                        date: "2024-09-05"
+                    },
+                    {
+                        name: "Maya Rodriguez",
+                        rating: 4,
+                        text: "Great cleansing oil for the price point. Removes makeup well and doesn't irritate my acne-prone skin. The Heartleaf extract really helps with inflammation.",
+                        verified: true,
+                        date: "2024-09-03"
+                    },
+                    {
+                        name: "Emma Thompson",
+                        rating: 5,
+                        text: "Game changer for my skincare routine! This oil cleanser has helped reduce my blackheads significantly. The pump dispenser is also very convenient.",
+                        verified: true,
+                        date: "2024-09-01"
+                    }
+                ],
+                // Variações do produto (como AliExpress)
+                variants: [
+                    {
+                        id: "single",
+                        name: "Single Product",
+                        price: 12.99,
+                        originalPrice: 28.99,
+                        image: "assets/products/cleanser-oil.jpg",
+                        description: "Anua Heartleaf Pore Control Cleansing Oil - 200ml",
+                        inStock: true
+                    },
+                    {
+                        id: "bundle",
+                        name: "Bundle (2 Products)",
+                        price: 19.99,
+                        originalPrice: 24.98,
+                        image: "assets/products/anua-bundle-real.jpg",
+                        description: "Oil Cleanser + Foam Cleanser - Complete Double Cleansing Set",
+                        inStock: true,
+                        savings: 4.99,
+                        bundleProducts: [
+                            { name: "Anua Heartleaf Pore Control Cleansing Oil", originalPrice: 12.99 },
+                            { name: "Anua Heartleaf Pore Deep Cleansing Foam", originalPrice: 11.99 }
+                        ]
                     }
                 ]
             }
@@ -466,8 +642,9 @@ class EliteStore {
     addToCart(product) {
         console.log('Adding to cart:', product.name, 'Current cart length:', this.cart.length);
         console.log('Product being added:', product);
+        console.log('Product image:', product.image);
         
-        const existingItem = this.cart.find(item => item.id === product.id);
+        const existingItem = this.cart.find(item => String(item.id) === String(product.id));
         
         if (existingItem) {
             existingItem.quantity += 1;
@@ -491,13 +668,14 @@ class EliteStore {
     }
 
     removeFromCart(productId) {
-        this.cart = this.cart.filter(item => item.id !== productId);
+        console.log('Removing from cart:', productId);
+        this.cart = this.cart.filter(item => String(item.id) !== String(productId));
         this.updateCartUI();
         this.saveCartToStorage();
     }
 
     updateCartQuantity(productId, quantity) {
-        const item = this.cart.find(item => item.id === productId);
+        const item = this.cart.find(item => String(item.id) === String(productId));
         if (item) {
             if (quantity <= 0) {
                 this.removeFromCart(productId);
@@ -510,7 +688,8 @@ class EliteStore {
     }
 
     changeQuantity(productId, change) {
-        const item = this.cart.find(item => item.id === productId);
+        console.log('Changing quantity for:', productId, 'change:', change);
+        const item = this.cart.find(item => String(item.id) === String(productId));
         if (item) {
             const newQuantity = item.quantity + change;
             if (newQuantity <= 0) {
@@ -562,26 +741,34 @@ class EliteStore {
             cartItems.innerHTML = this.cart.map((item, index) => `
                 <div class="flex items-center space-x-4 py-4 border-b border-gray-100" id="cart-item-${item.id}">
                     <div class="w-16 h-16 bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
-                        <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover rounded-lg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
-                        <span class="text-xs text-gray-400 hidden">IMG</span>
+                        <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover rounded-lg" 
+                             onerror="this.src='assets/products/anua-cleanser-1.png'; this.onerror=null;">
+                        <span class="text-xs text-gray-400 text-center hidden">IMG</span>
                     </div>
                     <div class="flex-1 min-w-0">
                         <h4 class="font-medium text-dark-gray truncate">${item.name}</h4>
-                        <p class="text-forest font-semibold">€${item.price}</p>
+                        ${item.isBundle && item.savings ? 
+                            `<p class="text-sm text-gray-500 mb-1">${item.bundleProducts?.map(p => p.name).join(' + ')}</p>
+                             <div class="flex items-center space-x-2">
+                                <p class="text-forest font-semibold">€${item.price.toFixed(2)}</p>
+                                <span class="text-xs text-green-600 bg-green-100 px-2 py-1 rounded">Save €${item.savings.toFixed(2)}</span>
+                             </div>` :
+                            `<p class="text-forest font-semibold">€${item.price.toFixed(2)}</p>`
+                        }
                     </div>
                     <div class="flex items-center space-x-2">
                         <button class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors" 
-                                onclick="window.eliteStore.changeQuantity(${item.id}, -1)">
+                                onclick="window.eliteStore.changeQuantity('${item.id}', -1)">
                             -
                         </button>
                         <span class="w-8 text-center font-medium" id="qty-${item.id}">${item.quantity}</span>
                         <button class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors"
-                                onclick="window.eliteStore.changeQuantity(${item.id}, 1)">
+                                onclick="window.eliteStore.changeQuantity('${item.id}', 1)">
                             +
                         </button>
                     </div>
                     <button class="text-red-500 hover:text-red-700 transition-colors ml-2"
-                            onclick="window.eliteStore.removeFromCart(${item.id})">
+                            onclick="window.eliteStore.removeFromCart('${item.id}')">
                         🗑️
                     </button>
                 </div>
@@ -653,6 +840,9 @@ class EliteStore {
     }
 
     showProductModal(product) {
+        // Armazenar produto atual para uso em outras funções
+        this.currentModalProduct = product;
+        
         const modal = document.getElementById('product-modal');
         const content = document.getElementById('modal-content');
 
@@ -696,9 +886,9 @@ class EliteStore {
                             </div>
                             
                             <div class="border-t pt-3">
-                                <div class="text-2xl font-bold text-red-600 mb-1">€${product.price}</div>
+                                <div class="text-2xl font-bold text-red-600 mb-1" id="main-product-price-${product.id}">€${product.variants ? product.variants[0].price : product.price}</div>
                                 <div class="text-xs text-gray-600 mb-3">FREE Returns</div>
-                                <p class="text-sm text-gray-700 leading-tight">${product.description}</p>
+                                <p class="text-sm text-gray-700 leading-tight" id="main-product-description-${product.id}">${product.description}</p>
                             </div>
                             
                             <!-- Benefits compactos -->
@@ -716,7 +906,42 @@ class EliteStore {
                         <!-- Painel de compra - 3 colunas -->
                         <div class="lg:col-span-3">
                             <div class="border border-gray-300 rounded-lg p-4 bg-white sticky top-4">
-                                <div class="text-2xl font-bold text-red-600 mb-2">€${product.price}</div>
+                                <!-- Product Variants Section (AliExpress style) -->
+                                ${product.variants ? `
+                                    <div class="mb-4 border-b pb-4">
+                                        <h4 class="font-semibold mb-3 text-sm">Variations:</h4>
+                                        <div class="grid grid-cols-1 gap-2">
+                                            ${product.variants.map((variant, index) => `
+                                                <div class="variant-option border-2 rounded-lg p-3 cursor-pointer transition-all hover:border-orange-400 ${index === 0 ? 'border-orange-400 bg-orange-50' : 'border-gray-200'}" 
+                                                     data-variant-id="${variant.id}" 
+                                                     data-product-id="${product.id}">
+                                                    <div class="flex items-center space-x-3">
+                                                        <div class="w-16 h-16 bg-gray-100 rounded overflow-hidden flex-shrink-0">
+                                                            <img src="${variant.image}" alt="${variant.name}" class="w-full h-full object-cover">
+                                                        </div>
+                                                        <div class="flex-1">
+                                                            <div class="font-semibold text-sm">${variant.name}</div>
+                                                            <div class="text-xs text-gray-600 mb-1">${variant.description}</div>
+                                                            <div class="flex items-center space-x-2">
+                                                                <span class="text-lg font-bold text-red-600">€${variant.price}</span>
+                                                                <span class="text-sm text-gray-400 line-through">€${variant.originalPrice}</span>
+                                                                ${variant.savings ? `<span class="text-xs bg-red-100 text-red-600 px-2 py-1 rounded">-€${variant.savings.toFixed(2)}</span>` : ''}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                ` : ''}
+                                
+                                <!-- Price Section -->
+                                <div id="price-section-${product.id}">
+                                    <div class="text-2xl font-bold text-red-600 mb-2" id="current-price-${product.id}">€${product.variants ? product.variants[0].price : product.price}</div>
+                                    <div class="text-sm text-gray-600 mb-1" id="price-description-${product.id}">${product.variants ? product.variants[0].name : 'Single Product'}</div>
+                                    <div class="text-xs text-gray-500 line-through mb-2" id="original-price-${product.id}">€${product.variants ? product.variants[0].originalPrice : product.originalPrice}</div>
+                                </div>
+                                
                                 <div class="text-xs text-gray-600 mb-3">
                                     <div class="flex items-center mb-1">
                                         <span class="text-green-600 mr-1">✓</span>
@@ -734,10 +959,10 @@ class EliteStore {
                                 
                                 <div class="space-y-2">
                                     <button id="modal-add-cart-${product.id}" class="w-full bg-sage-green text-white py-2 px-4 text-sm font-semibold rounded hover:bg-sage-dark transition-colors">
-                                        Add to Cart
+                                        <span id="add-cart-text-${product.id}">Add to Cart</span>
                                     </button>
                                     <button id="modal-buy-now-${product.id}" class="w-full bg-sage-green text-white py-2 px-4 text-sm font-semibold rounded hover:bg-sage-dark transition-colors">
-                                        Buy Now
+                                        <span id="buy-now-text-${product.id}">Buy Now</span>
                                     </button>
                                 </div>
                                 
@@ -820,6 +1045,31 @@ class EliteStore {
 
         // Wait for DOM to update before adding event listeners
         setTimeout(() => {
+            let selectedVariant = product.variants ? product.variants[0] : null;
+            
+            // Variant selection functionality
+            const variantOptions = document.querySelectorAll(`[data-product-id="${product.id}"].variant-option`);
+            variantOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    // Remove selection from all variants
+                    variantOptions.forEach(opt => {
+                        opt.classList.remove('border-orange-400', 'bg-orange-50');
+                        opt.classList.add('border-gray-200');
+                    });
+                    
+                    // Add selection to clicked variant
+                    option.classList.remove('border-gray-200');
+                    option.classList.add('border-orange-400', 'bg-orange-50');
+                    
+                    // Update selected variant
+                    const variantId = option.dataset.variantId;
+                    selectedVariant = product.variants.find(v => v.id === variantId);
+                    
+                    // Update price and main image
+                    this.updateProductVariant(product, selectedVariant);
+                });
+            });
+            
             // Remove existing event listeners to prevent duplicates
             const addCartBtn = document.getElementById(`modal-add-cart-${product.id}`);
             const buyNowBtn = document.getElementById(`modal-buy-now-${product.id}`);
@@ -835,9 +1085,14 @@ class EliteStore {
                 const newAddCartBtn = addCartBtn.cloneNode(true);
                 addCartBtn.parentNode.replaceChild(newAddCartBtn, addCartBtn);
                 newAddCartBtn.addEventListener('click', () => {
-                    console.log('Add to Cart clicked');
-                    this.addToCart(product);
-                    this.showNotification('Product added to cart!');
+                    console.log('Add to Cart clicked, Selected variant:', selectedVariant);
+                    if (selectedVariant && selectedVariant.id === 'bundle') {
+                        this.addBundleToCart(product, selectedVariant);
+                    } else {
+                        const productToAdd = selectedVariant ? { ...product, ...selectedVariant } : product;
+                        this.addToCart(productToAdd);
+                        this.showNotification('Product added to cart!');
+                    }
                     this.closeProductModal();
                 });
             } else {
@@ -848,8 +1103,13 @@ class EliteStore {
                 const newBuyNowBtn = buyNowBtn.cloneNode(true);
                 buyNowBtn.parentNode.replaceChild(newBuyNowBtn, buyNowBtn);
                 newBuyNowBtn.addEventListener('click', () => {
-                    console.log('Buy Now clicked for product:', product.name);
-                    this.addToCart(product);
+                    console.log('Buy Now clicked for product:', product.name, 'Selected variant:', selectedVariant);
+                    if (selectedVariant && selectedVariant.id === 'bundle') {
+                        this.addBundleToCart(product, selectedVariant);
+                    } else {
+                        const productToAdd = selectedVariant ? { ...product, ...selectedVariant } : product;
+                        this.addToCart(productToAdd);
+                    }
                     this.closeProductModal();
                     // Add small delay to ensure cart is updated
                     setTimeout(() => {
@@ -880,6 +1140,84 @@ class EliteStore {
         const modal = document.getElementById('product-modal');
         modal.classList.add('hidden');
         document.body.style.overflow = 'auto';
+    }
+
+    updateProductVariant(product, variant) {
+        // Update main section price and description
+        const mainPriceElement = document.getElementById(`main-product-price-${product.id}`);
+        const mainDescriptionElement = document.getElementById(`main-product-description-${product.id}`);
+        
+        // Update purchase panel price and description
+        const priceElement = document.getElementById(`current-price-${product.id}`);
+        const descriptionElement = document.getElementById(`price-description-${product.id}`);
+        const originalPriceElement = document.getElementById(`original-price-${product.id}`);
+        const mainImageContainer = document.getElementById('main-product-image');
+
+        // Update main section
+        if (mainPriceElement) mainPriceElement.textContent = `€${variant.price}`;
+        if (mainDescriptionElement) {
+            if (variant.id === 'bundle') {
+                mainDescriptionElement.textContent = variant.description;
+            } else {
+                mainDescriptionElement.textContent = product.description;
+            }
+        }
+
+        // Update purchase panel
+        if (priceElement) priceElement.textContent = `€${variant.price}`;
+        if (descriptionElement) descriptionElement.textContent = variant.name;
+        if (originalPriceElement) originalPriceElement.textContent = `€${variant.originalPrice}`;
+        
+        // Update main image
+        if (mainImageContainer && variant.image) {
+            mainImageContainer.innerHTML = `
+                <img src="${variant.image}" alt="${variant.name}" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                <span class="text-gray-400 text-sm hidden">Product Image</span>
+            `;
+        }
+    }
+
+    addBundleToCart(product, variant) {
+        console.log('Adding bundle variant to cart:', variant);
+        
+        if (!variant || !variant.bundleProducts) {
+            console.error('Invalid bundle variant');
+            return;
+        }
+
+        // Create single bundle item instead of individual products
+        const bundleProduct = {
+            id: `${product.id}-bundle-${variant.id}`,
+            name: variant.name,
+            price: variant.price,
+            originalPrice: variant.originalPrice,
+            image: variant.image || "assets/products/anua-bundle-real.jpg",
+            isBundle: true,
+            bundleId: `bundle-${product.id}-${variant.id}`,
+            description: variant.description,
+            savings: variant.savings,
+            bundleProducts: variant.bundleProducts // Keep reference to included products
+        };
+
+        console.log('Bundle product created:', bundleProduct);
+        console.log('Bundle image being used:', bundleProduct.image);
+
+        const existingItem = this.cart.find(item => String(item.id) === String(bundleProduct.id));
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            this.cart.push({ ...bundleProduct, quantity: 1 });
+        }
+
+        console.log(`Bundle variant added: ${variant.name} (€${variant.savings?.toFixed(2)} savings)`);
+        
+        this.updateCartUI();
+        this.saveCartToStorage();
+        this.showCartAnimation();
+        this.saveCartToStorage();
+        
+        // Show success message
+        this.showNotification(`${variant.name} added! ${variant.savings ? `You saved €${variant.savings.toFixed(2)} 🎉` : ''}`);
     }
 
     showNotification(message) {
@@ -1268,12 +1606,8 @@ class EliteStore {
         const fullName = `${firstName} ${lastName}`.trim();
         const email = document.getElementById('email')?.value.trim() || '';
         const phone = document.getElementById('phone')?.value.trim() || '';
-        
-        // Complete address information
-        const addressLine1 = document.getElementById('address-line1')?.value.trim() || '';
-        const addressLine2 = document.getElementById('address-line2')?.value.trim() || '';
+        const street = document.getElementById('address-line1')?.value.trim() || '';
         const city = document.getElementById('city')?.value.trim() || '';
-        const state = document.getElementById('state')?.value.trim() || '';
         const postalCode = document.getElementById('postal-code')?.value.trim() || '';
         const country = document.getElementById('country')?.value || '';
 
@@ -1281,28 +1615,16 @@ class EliteStore {
         console.log('- Name:', fullName);
         console.log('- Email:', email);
         console.log('- Phone:', phone);
-        console.log('- Address Line 1:', addressLine1);
-        console.log('- Address Line 2:', addressLine2);
-        console.log('- City:', city);
-        console.log('- State:', state);
-        console.log('- Postal Code:', postalCode);
-        console.log('- Country:', country);
-
-        // Validate required fields
-        if (!fullName || !email || !phone || !addressLine1 || !city || !postalCode || !country) {
-            throw new Error('Por favor, preencha todos os campos obrigatórios de entrega.');
-        }
+        console.log('- Address:', street, city, postalCode, country);
 
         return {
             name: fullName,
             email: email,
             phone: phone,
             address: {
-                line1: addressLine1,
-                line2: addressLine2,
+                street: street,
                 city: city,
-                state: state,
-                postal_code: postalCode,
+                postalCode: postalCode,
                 country: country
             }
         };
@@ -1440,7 +1762,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Payment processing functions
 async function createPaymentIntent(cartItems, customerInfo) {
     try {
-        const response = await fetch('https://elite-store-backend.onrender.com/api/create-payment-intent', {
+        const response = await fetch('http://localhost:3001/api/create-payment-intent', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -1487,8 +1809,8 @@ async function processStripePayment() {
         // Create payment intent
         const paymentData = await createPaymentIntent(window.store.cart, customerInfo);
 
-        // Initialize Stripe elements (TEST MODE)
-        const stripe = Stripe('pk_test_51RhRw1KC1EgAKi0LV547I6dGQm7fmP8tIYnMUPiVCe7Kz8ZV1Bll4AXnL9QzP3mQ8OHRSTsVkyNc5mjeEfiY9F0s00XuHO5kQ8');
+        // Initialize Stripe elements (LIVE MODE)
+        const stripe = Stripe('pk_live_51RhRw1KC1EgAKi0LwBZCBElUcxRfaECrpVxpQQX4F9lKoACATGhmYjlr2YMkXcEWPymXjQ8wtvVp2qfarQ6ZX8y600a6JhuhGe');
         const elements = stripe.elements({
             clientSecret: paymentData.clientSecret
         });
